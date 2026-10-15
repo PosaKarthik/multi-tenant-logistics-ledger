@@ -104,4 +104,25 @@ public class ProductService {
         Product product = productRepository.findByIdAndTenant_Id(productId,tenantId).orElseThrow(()->new ProductNotFoundException("Product not found"));
         return toResponse(product);
     }
+
+    public ProductResponse updateProduct(Long productId,ProductRequest productRequest){
+
+        Long tenantId = getCurrentTenantId();
+
+        Product product = productRepository.findByIdAndTenant_Id(productId,tenantId).orElseThrow(()-> new ProductNotFoundException("Product not found"));
+
+        if(productRepository.existsByTenant_IdAndSkuAndIdNot(tenantId,productRequest.getSku(),productId)){
+            throw  new ProductSkuAlreadyExistsException("Sku already exists for this tenant: "+ productRequest.getSku());
+        }
+
+        product.setName(productRequest.getName());
+        product.setSku(productRequest.getSku());
+        product.setDescription(productRequest.getDescription());
+        product.setUpdatedAt(LocalDateTime.now());
+
+        Product savedProduct = productRepository.save(product);
+
+        return toResponse(savedProduct);
+
+    }
 }

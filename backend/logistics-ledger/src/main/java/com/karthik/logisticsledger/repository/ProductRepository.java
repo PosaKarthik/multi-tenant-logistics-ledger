@@ -13,4 +13,6 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     boolean existsByTenant_IdAndSku(Long tenantId,String sku);
 
     Optional<Product> findByIdAndTenant_Id(Long id,Long tenantId);
+
+    boolean existsByTenant_IdAndSkuAndIdNot(Long tenantId,String sku,Long productId);
 }
