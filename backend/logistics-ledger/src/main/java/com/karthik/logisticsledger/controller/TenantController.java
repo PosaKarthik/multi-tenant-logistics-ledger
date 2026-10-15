@@ -1,6 +1,7 @@
 package com.karthik.logisticsledger.controller;
 
 
+import com.karthik.logisticsledger.context.TenantContext;
 import com.karthik.logisticsledger.dto.TenantRequest;
 import com.karthik.logisticsledger.dto.TenantResponse;
 import com.karthik.logisticsledger.dto.TenantStatusRequest;

@@ -24,4 +24,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleUserEmailAlreadyExists(UserEmailAlreadyExistsException exception){
         return  ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
     }
+
+   @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<String> handleInvalidCredentials(InvalidCredentialsException exception){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(UserInactiveException.class)
+    public ResponseEntity<String> handleUserInactive(UserInactiveException exception){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exception.getMessage());
+    }
 }
