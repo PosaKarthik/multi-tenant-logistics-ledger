@@ -6,6 +6,7 @@ import com.karthik.logisticsledger.dto.ProductRequest;
 import com.karthik.logisticsledger.dto.ProductResponse;
 import com.karthik.logisticsledger.entity.Product;
 import com.karthik.logisticsledger.entity.Tenant;
+import com.karthik.logisticsledger.exception.ProductNotFoundException;
 import com.karthik.logisticsledger.exception.ProductSkuAlreadyExistsException;
 import com.karthik.logisticsledger.exception.TenantNotFoundException;
 import com.karthik.logisticsledger.repository.ProductRepository;
@@ -100,7 +101,7 @@ public class ProductService {
 
         Long tenantId = getCurrentTenantId();
 
-        Product product = productRepository.findByIdAndTenant_Id(productId,tenantId).orElseThrow(()->new RuntimeException("Product not found"));
+        Product product = productRepository.findByIdAndTenant_Id(productId,tenantId).orElseThrow(()->new ProductNotFoundException("Product not found"));
         return toResponse(product);
     }
 }
