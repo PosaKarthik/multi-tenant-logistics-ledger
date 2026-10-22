@@ -32,4 +32,9 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "tenant_id",nullable = false)
     private Tenant tenant;
+
+    @Column(nullable = false)
+    private boolean deleted = false;
+
+    private LocalDateTime deletedAt;
 }

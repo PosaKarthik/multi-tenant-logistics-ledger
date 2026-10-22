@@ -94,14 +94,14 @@ public class ProductService {
 
     public List<ProductResponse> getAllProducts(){
         Long tenantId = getCurrentTenantId();
-        return productRepository.findAllByTenant_Id(tenantId).stream().map(this::toResponse).toList();
+        return productRepository.findAllByTenant_IdAndDeletedFalse(tenantId).stream().map(this::toResponse).toList();
     }
 
     public ProductResponse getProductById(Long productId){
 
         Long tenantId = getCurrentTenantId();
 
-        Product product = productRepository.findByIdAndTenant_Id(productId,tenantId).orElseThrow(()->new ProductNotFoundException("Product not found"));
+        Product product = productRepository.findByIdAndTenant_IdAndDeletedFalse(productId,tenantId).orElseThrow(()->new ProductNotFoundException("Product not found"));
         return toResponse(product);
     }
 
@@ -109,7 +109,7 @@ public class ProductService {
 
         Long tenantId = getCurrentTenantId();
 
-        Product product = productRepository.findByIdAndTenant_Id(productId,tenantId).orElseThrow(()-> new ProductNotFoundException("Product not found"));
+        Product product = productRepository.findByIdAndTenant_IdAndDeletedFalse(productId,tenantId).orElseThrow(()-> new ProductNotFoundException("Product not found"));
 
         if(productRepository.existsByTenant_IdAndSkuAndIdNot(tenantId,productRequest.getSku(),productId)){
             throw  new ProductSkuAlreadyExistsException("Sku already exists for this tenant: "+ productRequest.getSku());
@@ -124,5 +124,17 @@ public class ProductService {
 
         return toResponse(savedProduct);
 
+    }
+
+    public void deleteProduct(Long productId){
+
+        Long tenantId = getCurrentTenantId();
+
+        Product product = productRepository.findByIdAndTenant_IdAndDeletedFalse(productId,tenantId).orElseThrow(()-> new ProductNotFoundException("Product not found"));
+
+        product.setDeleted(true);
+        product.setDeletedAt(LocalDateTime.now());
+
+        productRepository.save(product);
     }
 }

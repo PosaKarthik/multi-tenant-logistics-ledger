@@ -8,11 +8,11 @@ import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product,Long> {
 
-    List<Product> findAllByTenant_Id(Long tenantId);
+    List<Product> findAllByTenant_IdAndDeletedFalse(Long tenantId);
 
     boolean existsByTenant_IdAndSku(Long tenantId,String sku);
 
-    Optional<Product> findByIdAndTenant_Id(Long id,Long tenantId);
+    Optional<Product> findByIdAndTenant_IdAndDeletedFalse(Long id,Long tenantId);
 
     boolean existsByTenant_IdAndSkuAndIdNot(Long tenantId,String sku,Long productId);
 }
