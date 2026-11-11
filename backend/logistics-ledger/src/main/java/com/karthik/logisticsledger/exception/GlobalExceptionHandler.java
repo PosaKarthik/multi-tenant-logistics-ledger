@@ -44,4 +44,20 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleCustomerNotFound(CustomerNotFoundException exception){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
+
+    @ExceptionHandler(ShipmentNotFoundException.class)
+    public ResponseEntity<String> handleShipmentNotFound(ShipmentNotFoundException exception){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(ShipmentNumberAlreadyExistsException.class)
+    public ResponseEntity<String> handleShipmentNumberAlreadyExists(ShipmentNumberAlreadyExistsException exception){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException exception){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
+
 }
