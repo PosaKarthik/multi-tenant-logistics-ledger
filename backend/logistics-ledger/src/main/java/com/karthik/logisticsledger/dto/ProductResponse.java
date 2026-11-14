@@ -1,8 +1,11 @@
 package com.karthik.logisticsledger.dto;
 
+import com.karthik.logisticsledger.entity.ProductType;
+import com.karthik.logisticsledger.entity.ProductUnit;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 
@@ -17,4 +20,9 @@ public class ProductResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Long tenantId;
+    private ProductType type;
+    private String category;
+    private ProductUnit unit;
+    private BigDecimal unitPrice;
+
 }

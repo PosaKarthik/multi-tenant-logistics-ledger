@@ -43,7 +43,7 @@ public class ProductService {
         }
     }
 
-    private ProductResponse toResponse(Product product){
+    private ProductResponse toProductResponse(Product product){
 
         ProductResponse productResponse = new ProductResponse();
 
@@ -54,6 +54,10 @@ public class ProductService {
         productResponse.setCreatedAt(product.getCreatedAt());
         productResponse.setUpdatedAt(product.getUpdatedAt());
         productResponse.setTenantId(product.getTenant().getId());
+        productResponse.setType(product.getType());
+        productResponse.setCategory(product.getCategory());
+        productResponse.setUnit(product.getUnit());
+        productResponse.setUnitPrice(product.getUnitPrice());
 
         return productResponse;
     }
@@ -76,25 +80,20 @@ public class ProductService {
         product.setCreatedAt(now);
         product.setUpdatedAt(now);
         product.setTenant(tenant);
+        product.setType(productRequest.getType());
+        product.setCategory(productRequest.getCategory());
+        product.setUnit(productRequest.getUnit());
+        product.setUnitPrice(productRequest.getUnitPrice());
 
         Product savedProduct = productRepository.save(product);
 
-        ProductResponse productResponse = new ProductResponse();
 
-        productResponse.setId(savedProduct.getId());
-        productResponse.setName(savedProduct.getName());
-        productResponse.setSku(savedProduct.getSku());
-        productResponse.setDescription(savedProduct.getDescription());
-        productResponse.setCreatedAt(savedProduct.getCreatedAt());
-        productResponse.setUpdatedAt(savedProduct.getUpdatedAt());
-        productResponse.setTenantId(savedProduct.getTenant().getId());
-
-        return productResponse;
+        return toProductResponse(savedProduct);
     }
 
     public List<ProductResponse> getAllProducts(){
         Long tenantId = getCurrentTenantId();
-        return productRepository.findAllByTenant_IdAndDeletedFalse(tenantId).stream().map(this::toResponse).toList();
+        return productRepository.findAllByTenant_IdAndDeletedFalse(tenantId).stream().map(this::toProductResponse).toList();
     }
 
     public ProductResponse getProductById(Long productId){
@@ -102,7 +101,7 @@ public class ProductService {
         Long tenantId = getCurrentTenantId();
 
         Product product = productRepository.findByIdAndTenant_IdAndDeletedFalse(productId,tenantId).orElseThrow(()->new ProductNotFoundException("Product not found"));
-        return toResponse(product);
+        return toProductResponse(product);
     }
 
     public ProductResponse updateProduct(Long productId,ProductRequest productRequest){
@@ -119,10 +118,14 @@ public class ProductService {
         product.setSku(productRequest.getSku());
         product.setDescription(productRequest.getDescription());
         product.setUpdatedAt(LocalDateTime.now());
+        product.setType(productRequest.getType());
+        product.setCategory(productRequest.getCategory());
+        product.setUnit(productRequest.getUnit());
+        product.setUnitPrice(productRequest.getUnitPrice());
 
         Product savedProduct = productRepository.save(product);
 
-        return toResponse(savedProduct);
+        return toProductResponse(savedProduct);
 
     }
 
